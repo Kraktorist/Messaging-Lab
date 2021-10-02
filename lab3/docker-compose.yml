@@ -1,0 +1,29 @@
+version: "3.9"
+services:
+
+  webhook:
+    container_name: webhook
+    build: ./webhook
+    ports:
+      - "5001:5001"
+    env_file: ./webhook/.env
+    restart: on-failure
+    depends_on: 
+      - rabbitmq
+
+  worker:
+    container_name: worker
+    build: ./worker
+    env_file: ./worker/.env
+    restart: on-failure
+    depends_on: 
+      - rabbitmq
+
+
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+      - "15692:15692"
